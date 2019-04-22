@@ -237,14 +237,19 @@ export class SupplierService {
     });
   }
 
-  editProduct(product) {
+  editProduct(product): Promise<any> {
     console.log(product);
     const newBody = this.transformProduct(product);
-    this.http.put(this.basicUrl + '/api/supplier/' + this.supplierId + '/product/' + product.id, newBody).subscribe((res) => {
-      this.fetchProducts();
-      console.log(res);
-    }, (err) => {
-      console.log(err);
+    return new Promise<any>((resolve, reject) => {
+      this.http.put(this.basicUrl + '/api/supplier/' + this.supplierId + '/product/' + product.id, newBody)
+        .subscribe((res) => {
+        this.fetchProducts();
+        resolve(res);
+        console.log(res);
+      }, (err) => {
+          reject(err);
+          console.log(err);
+      });
     });
   }
 
